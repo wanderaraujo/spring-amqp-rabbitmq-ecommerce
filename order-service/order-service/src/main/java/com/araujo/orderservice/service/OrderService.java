@@ -14,8 +14,7 @@ public class OrderService {
     private RabbitTemplate rabbitTemplate;
 
     public void createOrder(OrderModel order) {
-        this.rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_QUEUE_NAME_CASHBACK, order);
-        this.rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_QUEUE_NAME_NOTIFICATION, order);
+        this.rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_QUEUE_NAME, "", order);
     }
 
 }

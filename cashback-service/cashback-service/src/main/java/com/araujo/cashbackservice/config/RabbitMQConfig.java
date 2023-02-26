@@ -16,6 +16,21 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
+    public static final String ORDER_QUEUE_NAME = "orders.v1.order-created";
+    public static final String ORDER_QUEUE_NAME_CASHBACK = "orders.v1.order-created.generate-cashback";
+
+    @Bean
+    public Queue queueCashBack() {
+        return new Queue(ORDER_QUEUE_NAME_CASHBACK);
+    }
+
+    @Bean
+    public Binding binding() {
+        var queue = new Queue(ORDER_QUEUE_NAME_CASHBACK);
+        var exchange = new FanoutExchange(ORDER_QUEUE_NAME);
+        return BindingBuilder.bind(queue).to(exchange);
+    }
+
     @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);

@@ -1,6 +1,6 @@
 package com.araujo.orderservice.config;
 
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -10,25 +10,14 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String ORDER_QUEUE_NAME_CASHBACK = "orders.v1.order-created.generate-cashback";
-    public static final String ORDER_QUEUE_NAME_NOTIFICATION = "orders.v1.order-created.send-notification";
+    public static final String ORDER_QUEUE_NAME = "orders.v1.order-created";
 
     @Bean
-    public Queue queueCashBack() {
-        return new Queue(ORDER_QUEUE_NAME_CASHBACK);
-    }
-
-    @Bean
-    public Queue queueNotification() {
-        return new Queue(ORDER_QUEUE_NAME_NOTIFICATION);
+    public FanoutExchange fanoutExchange() {
+        return new FanoutExchange(ORDER_QUEUE_NAME);
     }
 
     @Bean
