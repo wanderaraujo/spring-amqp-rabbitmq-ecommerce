@@ -13,9 +13,14 @@ public class OrderService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void createOrder(OrderModel order) {
-        this.rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_QUEUE_NAME_CASHBACK, order);
-        this.rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_QUEUE_NAME_NOTIFICATION, order);
+    public void payOrder(OrderModel order) {
+        this.rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_EXCHANGE_NAME, RabbitMQConfig.ORDER_PAID_ROUTING_KEY,
+                order);
+    }
+
+    public void cancelOrder(OrderModel order) {
+        this.rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_EXCHANGE_NAME, RabbitMQConfig.ORDER_CANCEL_ROUTING_KEY,
+                order);
     }
 
 }

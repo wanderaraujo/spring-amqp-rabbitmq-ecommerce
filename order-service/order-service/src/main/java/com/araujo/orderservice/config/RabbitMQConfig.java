@@ -1,6 +1,6 @@
 package com.araujo.orderservice.config;
 
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -10,25 +10,16 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String ORDER_QUEUE_NAME_CASHBACK = "orders.v1.order-created.generate-cashback";
-    public static final String ORDER_QUEUE_NAME_NOTIFICATION = "orders.v1.order-created.send-notification";
+    public static final String ORDER_EXCHANGE_NAME = "orders.v1.events";
+    public static final String ORDER_PAID_ROUTING_KEY = "order.paid";
+    public static final String ORDER_CANCEL_ROUTING_KEY = "order.cancel";
 
     @Bean
-    public Queue queueCashBack() {
-        return new Queue(ORDER_QUEUE_NAME_CASHBACK);
-    }
-
-    @Bean
-    public Queue queueNotification() {
-        return new Queue(ORDER_QUEUE_NAME_NOTIFICATION);
+    public DirectExchange exchange() {
+        return new DirectExchange(ORDER_EXCHANGE_NAME);
     }
 
     @Bean

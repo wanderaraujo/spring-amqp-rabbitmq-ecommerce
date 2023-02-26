@@ -1,6 +1,7 @@
 package com.araujo.orderservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +17,15 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping
-    public OrderModel create(@RequestBody OrderModel order) {
-        orderService.createOrder(order);
+    @PostMapping("payment")
+    public OrderModel payOrder(@RequestBody OrderModel order) {
+        orderService.payOrder(order);
+        return order;
+    }
+
+    @DeleteMapping("payment")
+    public OrderModel cancelOrder(@RequestBody OrderModel order) {
+        this.orderService.cancelOrder(order);
         return order;
     }
 
