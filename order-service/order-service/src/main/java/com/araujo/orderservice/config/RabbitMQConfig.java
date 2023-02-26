@@ -1,7 +1,6 @@
 package com.araujo.orderservice.config;
 
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.HeadersExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -16,17 +15,18 @@ public class RabbitMQConfig {
 
     public static final String ORDER_EXCHANGE_NAME = "orders.v1.events";
 
-    public static final String ORDER_PAID_VIP_ROUTING_KEY = "order.vip.paid";
-    public static final String ORDER_PAID_BASIC_ROUTING_KEY = "order.basic.paid";
+    public static final String ORDER_EVENT_HEADER_NAME = "order-event-type";
+    public static final String CUSTUMER_TYPE_HEADER_NAME = "custumer-type";
 
-    public static final String ORDER_CANCEL_VIP_ROUTING_KEY = "order.vip.cancel";
-    public static final String ORDER_CANCEL_BASIC_ROUTING_KEY = "order.basic.cancel";
+    public static final String ORDER_PAID_EVENT_HEADER_VALUE = "order.paid";
+    public static final String ORDER_CANCEL_EVENT_HEADER_VALUE = "order.cancel";
 
-    public static final String ORDER_CREATED = "order.created";
+    public static final String CUSTUMER_BASIC_HEADER_VALUE = "basic";
+    public static final String CUSTUMER_PREMIUM_HEADER_VALUE = "premium";
 
     @Bean
-    public TopicExchange exchange() {
-        return new TopicExchange(ORDER_EXCHANGE_NAME);
+    public HeadersExchange exchange() {
+        return new HeadersExchange(ORDER_EXCHANGE_NAME);
     }
 
     @Bean

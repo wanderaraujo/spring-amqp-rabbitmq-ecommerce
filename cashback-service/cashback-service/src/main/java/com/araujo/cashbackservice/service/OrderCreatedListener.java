@@ -1,6 +1,5 @@
 package com.araujo.cashbackservice.service;
 
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
