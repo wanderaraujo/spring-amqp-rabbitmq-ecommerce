@@ -2,9 +2,6 @@ package com.araujo.cashbackservice.service;
 
 import java.math.BigDecimal;
 
-import javax.management.RuntimeErrorException;
-
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
