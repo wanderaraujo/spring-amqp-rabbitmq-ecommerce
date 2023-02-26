@@ -23,6 +23,7 @@ public class RabbitMQConfig {
     public static final String ORDER_EXCHANGE_NAME_DLX = "orders.v1.order-created.dlx";
     public static final String ORDER_QUEUE_NAME_CASHBACK = "orders.v1.order-created.generate-cashback";
     public static final String ORDER_QUEUE_NAME_CASHBACK_DLQ = "orders.v1.order-created.dlx.generate-cashback.dlq";
+    public static final String ORDER_QUEUE_NAME_CASHBACK_DLQ_LOT = "orders.v1.order-created.dlx.generate-cashback.dlq.parking-lot";
 
     @Bean
     public Queue queueCashBack() {
@@ -36,6 +37,11 @@ public class RabbitMQConfig {
     @Bean
     public Queue queueCashBackDLQ() {
         return new Queue(ORDER_QUEUE_NAME_CASHBACK_DLQ);
+    }
+
+    @Bean
+    public Queue queueCashBackParkinLot() {
+        return new Queue(ORDER_QUEUE_NAME_CASHBACK_DLQ_LOT);
     }
 
     @Bean
