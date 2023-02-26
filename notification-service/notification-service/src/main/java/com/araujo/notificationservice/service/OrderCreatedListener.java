@@ -1,5 +1,6 @@
 package com.araujo.notificationservice.service;
 
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
@@ -12,14 +13,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class OrderCreatedListener {
 
-    @RabbitListener(queues = RabbitMQConfig.NOTIFICATION_QUEUE_SUCESS_PAYMENT)
-    public void notificationSucess(OrderModel message) {
-        log.info("Greate news your payment {} has been approved ;)", message.getValue());
-    }
-
-    @RabbitListener(queues = RabbitMQConfig.NOTIFICATION_QUEUE_CANCEL_PAYMENT)
-    public void notificationCancel(OrderModel message) {
-        log.info("Sorry your limit is not enough to pay {} change your payment method", message.getValue());
+    @RabbitListener(queues = RabbitMQConfig.NOTIFICATIONS_ORDER_QUEUE)
+    public void onNotification(OrderModel message, Message me) {
+        log.info("Notification {} detail {}", message, me.getMessageProperties().getReceivedRoutingKey());
     }
 
 }

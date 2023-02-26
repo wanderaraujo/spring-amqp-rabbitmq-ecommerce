@@ -4,6 +4,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import com.araujo.cashbackservice.config.RabbitMQConfig;
 import com.araujo.cashbackservice.model.OrderModel;
 
 import lombok.extern.log4j.Log4j2;
@@ -12,13 +13,19 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class OrderCreatedListener {
 
-    public static final String ORDER_QUEUE_NAME_CASHBACK = "orders.v1.order-created.generate-cashback";
+    @RabbitListener(queues = RabbitMQConfig.CASHBACK_BASIC_QUEUE_NAME)
+    public void onOrderPaidBasic(OrderModel message) {
+        log.info("Cashback Cliente Basic generate sucessful {}", message);
+    }
 
-    @RabbitListener(queues = ORDER_QUEUE_NAME_CASHBACK)
-    public void onOrderCreated(OrderModel message) {
+    @RabbitListener(queues = RabbitMQConfig.CASHBACK_VIP_QUEUE_NAME)
+    public void onOrderPaidVip(OrderModel message) {
+        log.info("Cashback Cliente Vip generate sucessful {}", message);
+    }
 
-        log.info("message received {}", message.toString());
-
+    @RabbitListener(queues = RabbitMQConfig.CASHBACK_CANCEL_QUEUE_NAME)
+    public void onOrderCancel(OrderModel message) {
+        log.info("Cashback canceled {}", message);
     }
 
 }

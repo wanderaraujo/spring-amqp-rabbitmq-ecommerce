@@ -4,6 +4,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -18,34 +19,20 @@ public class RabbitMQConfig {
 
     public static final String ORDER_EXCHANGE_NAME = "orders.v1.events";
 
-    public static final String ORDER_PAID_ROUTING_KEY = "order.paid";
-    public static final String ORDER_CANCEL_ROUTING_KEY = "order.cancel";
+    public static final String NOTIFICATIONS_ORDER_QUEUE = "notifications.v1.order.events";
 
-    public static final String NOTIFICATION_QUEUE_SUCESS_PAYMENT = "notifications.v1.order-paid.sucess-payment";
-    public static final String NOTIFICATION_QUEUE_CANCEL_PAYMENT = "notifications.v1.order-paid.cancel-payment";
+    public static final String NOTIFICATIONS_EVENTS_ROUTING_KEY = "order.#";
 
     @Bean
-    public Queue queueSucessPayment() {
-        return new Queue(NOTIFICATION_QUEUE_SUCESS_PAYMENT);
+    public Queue queue() {
+        return new Queue(NOTIFICATIONS_ORDER_QUEUE);
     }
 
     @Bean
-    public Queue queueCancelPayment() {
-        return new Queue(NOTIFICATION_QUEUE_CANCEL_PAYMENT);
-    }
-
-    @Bean
-    public Binding bindingCancelPaymentNotification() {
-        var queue = queueCancelPayment();
-        var exchange = new DirectExchange(ORDER_EXCHANGE_NAME);
-        return BindingBuilder.bind(queue).to(exchange).with(ORDER_CANCEL_ROUTING_KEY);
-    }
-
-    @Bean
-    public Binding bindingSucessPaymentNotification() {
-        var queue = queueSucessPayment();
-        var exchange = new DirectExchange(ORDER_EXCHANGE_NAME);
-        return BindingBuilder.bind(queue).to(exchange).with(ORDER_PAID_ROUTING_KEY);
+    public Binding binding() {
+        var queue = queue();
+        var exchange = new TopicExchange(ORDER_EXCHANGE_NAME);
+        return BindingBuilder.bind(queue).to(exchange).with(NOTIFICATIONS_EVENTS_ROUTING_KEY);
     }
 
     @Bean

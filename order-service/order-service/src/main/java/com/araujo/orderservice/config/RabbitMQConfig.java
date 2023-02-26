@@ -1,6 +1,7 @@
 package com.araujo.orderservice.config;
 
 import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -14,12 +15,18 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     public static final String ORDER_EXCHANGE_NAME = "orders.v1.events";
-    public static final String ORDER_PAID_ROUTING_KEY = "order.paid";
-    public static final String ORDER_CANCEL_ROUTING_KEY = "order.cancel";
+
+    public static final String ORDER_PAID_VIP_ROUTING_KEY = "order.vip.paid";
+    public static final String ORDER_PAID_BASIC_ROUTING_KEY = "order.basic.paid";
+
+    public static final String ORDER_CANCEL_VIP_ROUTING_KEY = "order.vip.cancel";
+    public static final String ORDER_CANCEL_BASIC_ROUTING_KEY = "order.basic.cancel";
+
+    public static final String ORDER_CREATED = "order.created";
 
     @Bean
-    public DirectExchange exchange() {
-        return new DirectExchange(ORDER_EXCHANGE_NAME);
+    public TopicExchange exchange() {
+        return new TopicExchange(ORDER_EXCHANGE_NAME);
     }
 
     @Bean

@@ -17,6 +17,12 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @PostMapping()
+    public OrderModel createOder(@RequestBody OrderModel order) {
+        orderService.createOder(order);
+        return order;
+    }
+
     @PostMapping("payment")
     public OrderModel payOrder(@RequestBody OrderModel order) {
         orderService.payOrder(order);
