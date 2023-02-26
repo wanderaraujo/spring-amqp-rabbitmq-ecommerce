@@ -1,5 +1,8 @@
 package com.araujo.cashbackservice.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
@@ -16,18 +19,36 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String ORDER_QUEUE_NAME = "orders.v1.order-created";
+    public static final String ORDER_EXCHANGE_NAME = "orders.v1.order-created";
+    public static final String ORDER_EXCHANGE_NAME_DLX = "orders.v1.order-created.dlx";
     public static final String ORDER_QUEUE_NAME_CASHBACK = "orders.v1.order-created.generate-cashback";
+    public static final String ORDER_QUEUE_NAME_CASHBACK_DLQ = "orders.v1.order-created.dlx.generate-cashback.dlq";
 
     @Bean
     public Queue queueCashBack() {
-        return new Queue(ORDER_QUEUE_NAME_CASHBACK);
+        Map<String, Object> args = new HashMap<>();
+        args.put("x-dead-letter-exchange", ORDER_EXCHANGE_NAME_DLX);
+        // args.put("x-dead-letter-routing-key", ORDER_QUEUE_NAME_CASHBACK_DLQ); // send
+        // direct to queue
+        return new Queue(ORDER_QUEUE_NAME_CASHBACK, true, false, false, args);
+    }
+
+    @Bean
+    public Queue queueCashBackDLQ() {
+        return new Queue(ORDER_QUEUE_NAME_CASHBACK_DLQ);
     }
 
     @Bean
     public Binding binding() {
-        var queue = new Queue(ORDER_QUEUE_NAME_CASHBACK);
-        var exchange = new FanoutExchange(ORDER_QUEUE_NAME);
+        var queue = queueCashBack();
+        var exchange = new FanoutExchange(ORDER_EXCHANGE_NAME);
+        return BindingBuilder.bind(queue).to(exchange);
+    }
+
+    @Bean
+    public Binding bindingDLQ() {
+        var queue = queueCashBackDLQ();
+        var exchange = new FanoutExchange(ORDER_EXCHANGE_NAME_DLX);
         return BindingBuilder.bind(queue).to(exchange);
     }
 

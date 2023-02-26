@@ -14,7 +14,7 @@ public class OrderService {
     private RabbitTemplate rabbitTemplate;
 
     public void createOrder(OrderModel order) {
-        this.rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_QUEUE_NAME, "", order);
+        this.rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_EXCHANGE_NAME, "", order);
     }
 
 }

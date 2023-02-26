@@ -13,11 +13,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String ORDER_QUEUE_NAME = "orders.v1.order-created";
+    public static final String ORDER_EXCHANGE_NAME = "orders.v1.order-created";
+    public static final String ORDER_QUEUE_NAME_DLX = "orders.v1.order-created.dlx";
 
     @Bean
     public FanoutExchange fanoutExchange() {
-        return new FanoutExchange(ORDER_QUEUE_NAME);
+        return new FanoutExchange(ORDER_EXCHANGE_NAME);
+    }
+
+    @Bean
+    public FanoutExchange fanoutExchangeDLX() {
+        return new FanoutExchange(ORDER_QUEUE_NAME_DLX);
     }
 
     @Bean
