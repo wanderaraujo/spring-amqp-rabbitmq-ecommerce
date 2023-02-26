@@ -27,9 +27,14 @@ public class RabbitMQConfig {
     @Bean
     public Queue queueCashBack() {
         Map<String, Object> args = new HashMap<>();
+
         args.put("x-dead-letter-exchange", ORDER_EXCHANGE_NAME_DLX);
         // args.put("x-dead-letter-routing-key", ORDER_QUEUE_NAME_CASHBACK_DLQ); // send
         // direct to queue
+
+        // configure priority message
+        args.put("x-max-priority", 10);
+
         return new Queue(ORDER_QUEUE_NAME_CASHBACK, true, false, false, args);
     }
 
